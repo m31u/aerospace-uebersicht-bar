@@ -121,7 +121,7 @@ const InfoContainer = styled("div")({
 	whiteSpace: "pre",
 	alignItems: "center",
 	userSelect: "none",
-	gap: "4px"
+	gap: "4px",
 })
 
 /*
@@ -136,10 +136,9 @@ const Space = styled("div")(({ focused }) => {
 		alignItems: "center",
 		color: colors.Base,
 		border: `1px solid ${color}`,
-		borderRadius: "100%",
+		borderRadius: "16px",
 		width: "16px",
 		height: "16px",
-		fontSize: "12px",
 		background: color,
 	}
 })
@@ -174,11 +173,10 @@ function getWindowIcon(app) {
 	return windowIcons[app.toUpperCase()] || windowIcons["default"]
 }
 
-const WindowTab = ({ window }) => {
-	const { app } = window
-	const color = window.focused ? colors.Text : colors.Subtext0
+const WindowTab = styled("div")(({ focused }) => {
+	const color = focused ? colors.Text : colors.Subtext0
 
-	const className = css({
+	return {
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
@@ -186,24 +184,20 @@ const WindowTab = ({ window }) => {
 		border: `1px solid ${color}`,
 		borderRadius: "16px",
 		height: "16px",
-		fontSize: "12px",
 		padding: "0 6px",
 		background: color,
 		gap: "2px",
-	})
+	}
+})
 
-	const icon = useMemo(() => getWindowIcon(app), [app])
-
-	return <div className={className}>
-		<span className={css({ marginRight: "4px" })}>{icon}</span>
-		<span>{window.app}</span>
-	</div>
-}
 
 const Windows = ({ windows }) => {
 	return <InfoContainer>
 		{windows.map(window => {
-			return <WindowTab key={window.id} window={window} />
+			return <WindowTab key={window.id} focused={window.focused}>
+				<span className={css({ marginRight: "4px" })}>{getWindowIcon(window.app)}</span>
+				<span>{window.app}</span>
+			</WindowTab>
 		})}
 	</InfoContainer>
 }
@@ -222,8 +216,6 @@ const ClockContainer = styled("div")(({ color }) => ({
 	height: "16px",
 	borderRadius: "16px",
 }))
-
-const DATE_TIME_COMMAND = `date +'{ "currentDate": "%d/%m/%y", "currentTime": "%H:%M:%S" }'`
 
 const clockIcons = [
 	"\udb85\udc4a",
@@ -248,7 +240,7 @@ function Clock() {
 
 	useEffect(() => {
 		const tick = setInterval(() => {
-			run(DATE_TIME_COMMAND).then(
+			run(`date +'{ "currentDate": "%d/%m/%y", "currentTime": "%H:%M:%S" }'`).then(
 				output => setTime(JSON.parse(output))
 			)
 		}, 1000)
@@ -364,7 +356,7 @@ function Battery({ battery }) {
 
 
 	return (
-		<InfoContainer width="45%" justify="flex-end" >
+		<InfoContainer>
 			<BatteryContainer color={color}>
 				<span className={css({ paddingRight: "2px" })}>{icon}</span>
 				{percentage}%
@@ -406,7 +398,7 @@ const Container = styled("div")(() => ({
 	fontVariant: "normal",
 	lineHeight: 1,
 	textTransform: "none",
-	fontSize: "14px",
+	fontSize: "12px",
 	height: "16px",
 	padding: "8px",
 	color: colors.Text,
