@@ -121,7 +121,7 @@ const InfoContainer = styled("div")({
  */
 const Space = styled("div")(({ focused, empty }) => {
 	const color = focused ? colors.Text : colors.Subtext0
-	const padding = empty ? "4px" : "6px"
+	const padding = empty ? 0 : "6px"
 	return {
 		display: "flex",
 		justifyContent: "center",
@@ -145,7 +145,7 @@ const windowIcons = {
 	"FINDER": "\udb80\udc36",
 	"KARABINER-ELEMENTS": "\udb85\udcc0",
 	"SYSTEM SETTINGS": "\uef70",
-	"SPOTIFY": "\udb81\udcc7",
+	"SPOTIFY": "\uf1bc",
 	"default": "\udb81\ude14"
 }
 
