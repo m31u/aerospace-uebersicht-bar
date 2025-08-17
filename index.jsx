@@ -29,7 +29,6 @@ export const initialState = {
 		charging: false,
 	},
 	workspaces: [],
-	windows: []
 }
 
 export function updateState(event, state) {
@@ -56,12 +55,6 @@ export function updateState(event, state) {
 			return {
 				...state,
 				workspaces: event.data
-			}
-		}
-		case "UPDATE_WINDOWS": {
-			return {
-				...state,
-				windows: event.data
 			}
 		}
 		default:
@@ -136,21 +129,27 @@ const Space = styled("div")(({ focused }) => {
 		color: colors.Base,
 		border: `1px solid ${color}`,
 		borderRadius: "16px",
-		width: "16px",
 		height: "16px",
 		background: color,
+		padding: "0 6px",
+		minWidth: "16px",
+		boxSizing: "border-box",
+		"span.icon": {
+			padding: "0 6px"
+		}
 	}
 })
 
 function Workspaces({ workspaces }) {
 	return (
 		<InfoContainer width="45%" justify="flex-start">
-			{workspaces.map(({ empty, focused, workspace }) => {
-				if (empty && !focused) {
+			{workspaces.map(({ focused, workspace, windows }) => {
+				if (!windows.length && !focused) {
 					return
 				}
 				return <Space key={workspace} focused={focused}>
-					{workspace}
+					<span>{workspace}</span>
+					{windows.map(w => <span className="icon">{getWindowIcon(w.app)}</span>)}
 				</Space>
 			}
 			)}
@@ -162,8 +161,8 @@ function Workspaces({ workspaces }) {
  * Window Component
  */
 const windowIcons = {
-	"GHOSTTY": "\ue795",
-	"ZEN": "\udb83\udf94",
+	"GHOSTTY": "\uf489",
+	"ZEN": "\uee47",
 	"FINDER": "\udb80\udc36",
 	"KARABINER-ELEMENTS": "\udb85\udcc0",
 	"SYSTEM SETTINGS": "\uef70",
@@ -173,37 +172,6 @@ const windowIcons = {
 
 function getWindowIcon(app) {
 	return windowIcons[app.toUpperCase()] || windowIcons["default"]
-}
-
-const WindowTab = styled("div")(({ focused }) => {
-	const color = focused ? colors.Text : colors.Subtext0
-
-	return {
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-		color: colors.Base,
-		border: `1px solid ${color}`,
-		borderRadius: "16px",
-		height: "16px",
-		padding: "0 6px",
-		background: color,
-		gap: "2px",
-	}
-})
-
-
-const Windows = ({ windows }) => {
-	return (
-		<InfoContainer>
-			{windows.map(window => {
-				return <WindowTab key={window.id} focused={window.focused}>
-					<span className={css({ marginRight: "4px" })}>{getWindowIcon(window.app)}</span>
-					<span>{window.app}</span>
-				</WindowTab>
-			})}
-		</InfoContainer>
-	)
 }
 
 /*
@@ -410,7 +378,8 @@ const Message = styled("div")({
 
 const Container = styled("div")(() => ({
 	display: "flex",
-	margin: "10px",
+	margin: "8px",
+	padding: "0 2px",
 	fontFamily: "Iosevka Nerd Font",
 	fontWeight: "normal",
 	fontVariant: "normal",
@@ -424,7 +393,7 @@ const Container = styled("div")(() => ({
 	cursor: "default"
 }))
 
-function Widget({ connected, battery, workspaces, windows }) {
+function Widget({ connected, battery, workspaces }) {
 
 	if (!connected) {
 		return (
@@ -440,7 +409,6 @@ function Widget({ connected, battery, workspaces, windows }) {
 		<Container >
 			<LeftContainer>
 				<Workspaces workspaces={workspaces} />
-				<Windows windows={windows} />
 			</LeftContainer>
 			<RightContainer>
 				<Battery battery={battery} />
@@ -452,5 +420,5 @@ function Widget({ connected, battery, workspaces, windows }) {
 }
 
 export function render(state) {
-	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} windows={state.windows} />
+	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} />
 }
