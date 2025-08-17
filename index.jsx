@@ -139,6 +139,19 @@ const Space = styled("div")(({ focused }) => {
 		}
 	}
 })
+const windowIcons = {
+	"GHOSTTY": "\uf489",
+	"ZEN": "\uee47",
+	"FINDER": "\udb80\udc36",
+	"KARABINER-ELEMENTS": "\udb85\udcc0",
+	"SYSTEM SETTINGS": "\uef70",
+	"SPOTIFY": "\udb81\udcc7",
+	"default": "\udb81\ude14"
+}
+
+function getWindowIcon(app) {
+	return windowIcons[app.toUpperCase()] || windowIcons["default"]
+}
 
 function Workspaces({ workspaces }) {
 	return (
@@ -157,22 +170,7 @@ function Workspaces({ workspaces }) {
 	)
 }
 
-/*
- * Window Component
- */
-const windowIcons = {
-	"GHOSTTY": "\uf489",
-	"ZEN": "\uee47",
-	"FINDER": "\udb80\udc36",
-	"KARABINER-ELEMENTS": "\udb85\udcc0",
-	"SYSTEM SETTINGS": "\uef70",
-	"SPOTIFY": "\udb81\udcc7",
-	"default": "\udb81\ude14"
-}
 
-function getWindowIcon(app) {
-	return windowIcons[app.toUpperCase()] || windowIcons["default"]
-}
 
 /*
  * Clock Components
