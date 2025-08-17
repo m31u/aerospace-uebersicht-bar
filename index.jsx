@@ -207,15 +207,15 @@ const clockIcons = [
 function Clock() {
 	const [time, setTime] = useState({
 		currentDate: "Sat 31/12/99",
-		currentTime: "00:00:00"
+		currentTime: "00:00"
 	})
 
 	useEffect(() => {
 		const tick = setInterval(() => {
-			run(`date +'{ "currentDate": "%a %d/%m/%y", "currentTime": "%H:%M:%S" }'`).then(
+			run(`date +'{ "currentDate": "%a %d/%m/%y", "currentTime": "%H:%M" }'`).then(
 				output => setTime(JSON.parse(output))
 			)
-		}, 1000)
+		}, 5000)
 
 		return () => clearInterval(tick)
 	}, [])
