@@ -119,9 +119,9 @@ const InfoContainer = styled("div")({
 /*
  * Workspaces Component
  */
-const Space = styled("div")(({ focused }) => {
+const Space = styled("div")(({ focused, empty }) => {
 	const color = focused ? colors.Text : colors.Subtext0
-
+	const padding = empty ? "4px" : "6px"
 	return {
 		display: "flex",
 		justifyContent: "center",
@@ -131,7 +131,7 @@ const Space = styled("div")(({ focused }) => {
 		borderRadius: "16px",
 		height: "16px",
 		background: color,
-		padding: "0 6px",
+		padding: `0 ${padding}`,
 		minWidth: "16px",
 		boxSizing: "border-box",
 		"span.icon": {
@@ -157,10 +157,12 @@ function Workspaces({ workspaces }) {
 	return (
 		<InfoContainer width="45%" justify="flex-start">
 			{workspaces.map(({ focused, workspace, windows }) => {
-				if (!windows.length && !focused) {
+				const empty = !windows.length
+
+				if (empty && !focused) {
 					return
 				}
-				return <Space key={workspace} focused={focused}>
+				return <Space key={workspace} empty={empty} focused={focused}>
 					<span>{workspace}</span>
 					{windows.map(w => <span className="icon">{getWindowIcon(w.app)}</span>)}
 				</Space>
@@ -204,13 +206,13 @@ const clockIcons = [
 
 function Clock() {
 	const [time, setTime] = useState({
-		currentDate: "31/12/99",
+		currentDate: "Sat 31/12/99",
 		currentTime: "00:00:00"
 	})
 
 	useEffect(() => {
 		const tick = setInterval(() => {
-			run(`date +'{ "currentDate": "%d/%m/%y", "currentTime": "%H:%M:%S" }'`).then(
+			run(`date +'{ "currentDate": "%a %d/%m/%y", "currentTime": "%H:%M:%S" }'`).then(
 				output => setTime(JSON.parse(output))
 			)
 		}, 1000)
