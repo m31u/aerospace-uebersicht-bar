@@ -1,6 +1,6 @@
 import { styled, run, css, React } from "uebersicht"
 
-const { useMemo, useEffect, useState } = React
+const { useMemo, useEffect, useState, useRef } = React
 
 function connectToServer(dispatch) {
 	const ws = new WebSocket("ws://localhost:3000/listen")
@@ -29,6 +29,8 @@ export const initialState = {
 		charging: false,
 	},
 	workspaces: [],
+	apps: [],
+	show: false
 }
 
 export function updateState(event, state) {
@@ -45,6 +47,12 @@ export function updateState(event, state) {
 				connected: true
 			}
 		}
+		case "TOGGLE_SHOW_LAUNCH": {
+			return {
+				...state,
+				show: !state.show
+			}
+		}
 		case "UPDATE_BATTERY": {
 			return {
 				...state,
@@ -55,6 +63,12 @@ export function updateState(event, state) {
 			return {
 				...state,
 				workspaces: event.data
+			}
+		}
+		case "UPDATE_APP_LIST": {
+			return {
+				...state,
+				apps: event.data
 			}
 		}
 		default:
@@ -393,7 +407,116 @@ const Container = styled("div")(() => ({
 	cursor: "default"
 }))
 
-function Widget({ connected, battery, workspaces }) {
+const LaunchContainer = styled("div")(({ show }) => ({
+	display: show ? "flex" : "none",
+	justifyContent: "space-between",
+	alignItems: "center",
+	position: "absolute",
+	top: 0,
+	left: `${window.innerWidth / 2 - 150}px`,
+	width: "300px",
+	padding: "0 6px",
+	boxSizing: "border-box",
+	margin: "8px",
+	borderRadius: "16px",
+	background: colors.Text
+}))
+
+const launchInputClass = css({
+	background: "none",
+	height: "16px",
+	color: colors.Base,
+	caretColor: "transparent",
+	outline: "none",
+	boxShadow: "none",
+	border: "none",
+	padding: 0,
+	width: "180px"
+})
+
+function fuzzyMatch(pattern, target) {
+	pattern = pattern.toLowerCase()
+	target = target.toLowerCase()
+
+	let patternIndex = 0
+	let score = 0
+	let consecutive = 0
+
+	for (let i = 0; i < target.length && patternIndex < pattern.length; i++) {
+		if (pattern[patternIndex] === target[i]) {
+			patternIndex += 1
+			consecutive += 1
+			score += 10 * consecutive
+			continue
+		}
+		consecutive = 0
+	}
+	return patternIndex === pattern.length ? score : 0
+}
+
+function fuzzyArraySort(pattern, array) {
+	const scores = {}
+
+	return array.filter(s => {
+		scores[s] = fuzzyMatch(pattern, s)
+		return scores[s] > 0
+	}).toSorted((a, b) => {
+		return scores[b] - scores[a]
+	})
+}
+
+function Launch({ show, apps, dispatch }) {
+	const [suggestion, setSuggestion] = useState("")
+	const input = useRef(null)
+
+	useEffect(() => {
+		if (!input.current) {
+			return
+		}
+		if (show) {
+			input.current?.focus()
+		}
+		if (!show) {
+			setSuggestion("")
+			input.current.value = ""
+		}
+
+		function onKeyPress(e) {
+			console.log(e)
+			if (e.key === "Enter") {
+				setSuggestion(s => {
+					run(`open -a '${s}'`).then(console.log)
+
+					return ""
+				})
+				dispatch({ type: "TOGGLE_SHOW_LAUNCH" })
+				return
+			}
+			setSuggestion(fuzzyArraySort(input.current.value + e.key, apps)[0] || "")
+		}
+
+		function onDelete(e) {
+			if (e.key === "Backspace") {
+				setSuggestion(fuzzyArraySort(input.current.value, apps)[0] || "")
+			}
+
+		}
+
+		input.current.addEventListener("keypress", onKeyPress)
+		input.current.addEventListener("keyup", onDelete)
+
+		return () => {
+			input.current.removeEventListener("keypress", onKeyPress)
+			input.current.removeEventListener("keyup", onDelete)
+		}
+	}, [show])
+
+
+
+	return <LaunchContainer show={show} ><input type="text" ref={input} autocomplete="off" autocorrect="off" autocapitalize="off" className={launchInputClass}></input>{suggestion}</LaunchContainer>
+}
+
+function Widget({ connected, battery, workspaces, show, apps, dispatch }) {
 
 	if (!connected) {
 		return (
@@ -407,6 +530,7 @@ function Widget({ connected, battery, workspaces }) {
 
 	return (
 		<Container >
+			<Launch show={show} apps={apps} dispatch={dispatch} />
 			<LeftContainer>
 				<Workspaces workspaces={workspaces} />
 			</LeftContainer>
@@ -419,6 +543,6 @@ function Widget({ connected, battery, workspaces }) {
 
 }
 
-export function render(state) {
-	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} />
+export function render(state, dispatch) {
+	return <Widget dispatch={dispatch} show={state.show} connected={state.connected} battery={state.battery} workspaces={state.workspaces} apps={state.apps} />
 }
