@@ -107,6 +107,7 @@ export const className = {
 	top: 0,
 	left: 0,
 	padding: 0,
+	margin: 0,
 	width: "100%",
 }
 
@@ -166,6 +167,7 @@ const windowIcons = {
 	"FINDER": "\udb80\udc36",
 	"KARABINER-ELEMENTS": "\udb85\udcc0",
 	"SYSTEM SETTINGS": "\uef70",
+	"SPOTIFY": "\udb81\udcc7",
 	"default": "\udb81\ude14"
 }
 
@@ -408,7 +410,7 @@ const Message = styled("div")({
 
 const Container = styled("div")(() => ({
 	display: "flex",
-	margin: "8px",
+	margin: "10px",
 	fontFamily: "Iosevka Nerd Font",
 	fontWeight: "normal",
 	fontVariant: "normal",
@@ -416,10 +418,6 @@ const Container = styled("div")(() => ({
 	textTransform: "none",
 	fontSize: "12px",
 	height: "16px",
-	padding: "8px",
-	color: colors.Text,
-	background: colors.Base,
-	borderRadius: "24px",
 	flexGrow: 1,
 	justifyContent: "space-between",
 	userSelect: "none",
