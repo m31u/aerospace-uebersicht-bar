@@ -19,9 +19,7 @@ function connectToServer(dispatch) {
 	})
 }
 
-export function init(dispatch) {
-	connectToServer(dispatch)
-}
+export const init = connectToServer
 
 export const initialState = {
 	connected: false,
@@ -144,17 +142,19 @@ const Space = styled("div")(({ focused }) => {
 })
 
 function Workspaces({ workspaces }) {
-	return <InfoContainer width="45%" justify="flex-start">
-		{workspaces.map(({ empty, focused, workspace }) => {
-			if (empty && !focused) {
-				return
+	return (
+		<InfoContainer width="45%" justify="flex-start">
+			{workspaces.map(({ empty, focused, workspace }) => {
+				if (empty && !focused) {
+					return
+				}
+				return <Space key={workspace} focused={focused}>
+					{workspace}
+				</Space>
 			}
-			return <Space key={workspace} focused={focused}>
-				{workspace}
-			</Space>
-		}
-		)}
-	</InfoContainer>
+			)}
+		</InfoContainer>
+	)
 }
 
 /*
@@ -192,14 +192,16 @@ const WindowTab = styled("div")(({ focused }) => {
 
 
 const Windows = ({ windows }) => {
-	return <InfoContainer>
-		{windows.map(window => {
-			return <WindowTab key={window.id} focused={window.focused}>
-				<span className={css({ marginRight: "4px" })}>{getWindowIcon(window.app)}</span>
-				<span>{window.app}</span>
-			</WindowTab>
-		})}
-	</InfoContainer>
+	return (
+		<InfoContainer>
+			{windows.map(window => {
+				return <WindowTab key={window.id} focused={window.focused}>
+					<span className={css({ marginRight: "4px" })}>{getWindowIcon(window.app)}</span>
+					<span>{window.app}</span>
+				</WindowTab>
+			})}
+		</InfoContainer>
+	)
 }
 
 /*
@@ -250,16 +252,18 @@ function Clock() {
 
 	const clock = clockIcons[time.currentTime.slice(0, 2) % 12]
 
-	return <>
-		<ClockContainer color={colors.Sapphire}>
-			<span className={css({ marginRight: "6px" })}>{"\udb83\ude17"}</span>
-			{time.currentDate}
-		</ClockContainer>
-		<ClockContainer color={colors.Blue}>
-			<span className={css({ marginRight: "6px" })}>{clock}</span>
-			{time.currentTime}
-		</ClockContainer>
-	</>
+	return (
+		<InfoContainer>
+			<ClockContainer color={colors.Sapphire}>
+				<span className={css({ marginRight: "6px" })}>{"\udb83\ude17"}</span>
+				{time.currentDate}
+			</ClockContainer>
+			<ClockContainer color={colors.Blue}>
+				<span className={css({ marginRight: "6px" })}>{clock}</span>
+				{time.currentTime}
+			</ClockContainer>
+		</InfoContainer>
+	)
 }
 
 /*
@@ -383,11 +387,23 @@ const RightContainer = styled('div')({
 	gap: "4px"
 })
 
-const Message = styled("div")({
+const MessageContainer = styled("div")({
 	display: "flex",
 	flexGrow: 1,
 	justifyContent: "center",
 	alignItems: "center",
+})
+
+const Message = styled("div")({
+	display: "flex",
+	height: "16px",
+	borderRadius: "16px",
+	border: `1px solid ${colors.Yellow}`,
+	background: colors.Yellow,
+	justifyContent: "center",
+	color: colors.Base,
+	alignItems: "center",
+	padding: "0 6px"
 })
 
 const Container = styled("div")(() => ({
@@ -413,7 +429,13 @@ const Container = styled("div")(() => ({
 function Widget({ connected, battery, workspaces, windows }) {
 
 	if (!connected) {
-		return <Container><Message>Connecting to server...</Message></Container>
+		return (
+			<Container>
+				<MessageContainer>
+					<Message>Connecting to server...</Message>
+				</MessageContainer>
+			</Container>
+		)
 	}
 
 	return (
