@@ -1,5 +1,6 @@
 import { styled, css, React } from "uebersicht"
-import { colors, InfoContainer } from "./util.js"
+import { InfoContainer } from "./common.jsx"
+import { colors } from "../util.js"
 const { useMemo } = React
 
 const BatteryContainer = styled("div")(({ color }) => ({

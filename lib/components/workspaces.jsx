@@ -1,5 +1,6 @@
-import { styled } from "uebersicht"
-import { colors, InfoContainer } from "./util"
+import { styled, React } from "uebersicht"
+import { InfoContainer } from "./common.jsx"
+import { colors } from "../util.js"
 
 const Space = styled("div")(({ focused, empty }) => {
 	const color = focused ? colors.Text : colors.Subtext0

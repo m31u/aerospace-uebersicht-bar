@@ -1,5 +1,7 @@
-import { styled, run, css, React } from 'uebersicht'
-import { colors, InfoContainer } from './util.js'
+
+import { styled, css, run, React } from "uebersicht"
+import { InfoContainer } from "./common.jsx"
+import { colors } from "../util.js"
 
 const { useEffect, useState } = React
 
