@@ -11,7 +11,7 @@ function connectToServer(dispatch) {
 	})
 
 	ws.addEventListener("open", () => {
-		dispatch({ type: "CONNECTED_TO_SERVER", data: ws })
+		dispatch({ type: "CONNECTED_TO_SERVER" })
 	})
 
 	ws.addEventListener("message", message => {
@@ -43,7 +43,6 @@ export function updateState(event, state) {
 			return {
 				...state,
 				connected: true,
-				ws: event.data
 			}
 		}
 		case "TOGGLE_SHOW_LAUNCH": {
@@ -62,12 +61,6 @@ export function updateState(event, state) {
 			return {
 				...state,
 				workspaces: event.data
-			}
-		}
-		case "UPDATE_APP_LIST": {
-			return {
-				...state,
-				apps: event.data
 			}
 		}
 		default:
