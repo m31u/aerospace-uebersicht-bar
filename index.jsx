@@ -3,12 +3,13 @@ import { Workspaces } from "./lib/components/workspaces.jsx"
 import { Battery } from "./lib/components/battery.jsx"
 import { Clock } from "./lib/components/clock.jsx"
 import { colors } from "./lib/util.js"
-import { StateEvents, connectToServer } from "./lib/server.js"
+import { StateEvents, initServer } from "./lib/server.js"
 
-const init = connectToServer
+const init = initServer
 
 const initialState = {
 	connected: false,
+	error: false,
 	battery: {
 		percentage: 0,
 		source: "Unknown",
@@ -29,6 +30,13 @@ function updateState(event, state) {
 			return {
 				...state,
 				connected: true,
+				error: false
+			}
+		}
+		case StateEvents.ServerError: {
+			return {
+				...state,
+				error: true
 			}
 		}
 		case StateEvents.Battery: {
@@ -48,7 +56,6 @@ function updateState(event, state) {
 	}
 }
 
-
 const className = {
 	top: 0,
 	left: 0,
@@ -62,6 +69,7 @@ function Widget({ connected, battery, workspaces }) {
 	if (!connected) {
 		return (
 			<Container>
+
 				<MessageContainer>
 					<Message>Connecting to server...</Message>
 				</MessageContainer>
