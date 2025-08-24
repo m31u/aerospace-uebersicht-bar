@@ -46,7 +46,7 @@ function Workspace({ workspace, windows, focused }) {
 	}
 	return <Space key={workspace} empty={empty} focused={focused}>
 		<span>{workspace}</span>
-		{windows.map(w => <span className="icon">{getWindowIcon(w.app)}</span>)}
+		{windows.map(w => <span key={w.id} className="icon">{getWindowIcon(w.app)}</span>)}
 	</Space>
 
 }

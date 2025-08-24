@@ -4,18 +4,23 @@ import { Battery } from "./lib/components/battery.jsx"
 import { Clock } from "./lib/components/clock.jsx"
 import { colors } from "./lib/util.js"
 import { StateEvents, initServer } from "./lib/server.js"
+import { InfoContainer } from "./lib/components/common.jsx"
+import { Network } from "./lib/components/network.jsx"
 
 const init = initServer
 
 const initialState = {
 	connected: false,
-	error: false,
 	battery: {
 		percentage: 0,
 		source: "Unknown",
 		charging: false,
 	},
 	workspaces: [],
+	network: {
+		ssid: "",
+		connected: false
+	}
 }
 
 function updateState(event, state) {
@@ -29,14 +34,7 @@ function updateState(event, state) {
 		case StateEvents.Connected: {
 			return {
 				...state,
-				connected: true,
-				error: false
-			}
-		}
-		case StateEvents.ServerError: {
-			return {
-				...state,
-				error: true
+				connected: true
 			}
 		}
 		case StateEvents.Battery: {
@@ -49,6 +47,33 @@ function updateState(event, state) {
 			return {
 				...state,
 				workspaces: event.data
+			}
+		}
+		case StateEvents.SSIDChange: {
+			return {
+				...state,
+				network: {
+					ssid: event.data.ssid,
+					connected: true
+				}
+			}
+		}
+		case StateEvents.Connected: {
+			return {
+				...state,
+				network: {
+					...state.network,
+					connected: true
+				}
+			}
+		}
+		case StateEvents.WifiDisconneted: {
+			return {
+				...state,
+				network: {
+					ssid: "",
+					connected: false
+				}
 			}
 		}
 		default:
@@ -64,7 +89,7 @@ const className = {
 	width: "100%",
 }
 
-function Widget({ connected, battery, workspaces }) {
+function Widget({ connected, battery, workspaces, network }) {
 
 	if (!connected) {
 		return (
@@ -83,6 +108,7 @@ function Widget({ connected, battery, workspaces }) {
 				<Workspaces workspaces={workspaces} />
 			</LeftContainer>
 			<RightContainer>
+				<Network network={network} />
 				<Battery battery={battery} />
 				<Clock />
 			</RightContainer>
@@ -91,7 +117,7 @@ function Widget({ connected, battery, workspaces }) {
 }
 
 function render(state) {
-	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} />
+	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} network={state.network} />
 }
 
 export { className, initialState, init, updateState, render }
