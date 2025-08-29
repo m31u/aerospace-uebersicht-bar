@@ -14,21 +14,28 @@ const NetworkContainer = styled("div")(({ color }) => ({
 	borderRadius: "16px",
 }))
 
-const Icon = styled("span")({
-	paddingRight: "8px"
-})
+const Icon = styled("span")(({ ssid }) => ({
+	paddingRight: ssid ? "8px" : "6px"
+}))
 
 function Network({ network }) {
 	let ssid = network.ssid
 	let color = colors.Green
+
 	if (!ssid) {
 		ssid = "Not Connected"
 		color = colors.Text
 	}
 
+	if (ssid == "NO_PERMISSIONS") {
+		ssid = "SSID Not Availble"
+	}
+
+
+
 
 	return <InfoContainer>
-		<NetworkContainer color={color}><Icon>{"\uf1eb"}</Icon>{ssid}</NetworkContainer>
+		<NetworkContainer color={color}><Icon ssid={network.showSSID}>{"\uf1eb"}</Icon>{network.showSSID && ssid}</NetworkContainer>
 	</InfoContainer>
 }
 

@@ -10,6 +10,7 @@ import { Network } from "./lib/components/network.jsx"
 const init = initServer
 
 const initialState = {
+	daemons: [],
 	connected: false,
 	battery: {
 		percentage: 0,
@@ -19,7 +20,8 @@ const initialState = {
 	workspaces: [],
 	network: {
 		ssid: "",
-		connected: false
+		connected: false,
+		showSSID: false
 	}
 }
 
@@ -76,6 +78,15 @@ function updateState(event, state) {
 				}
 			}
 		}
+		case StateEvents.ShowSSID: {
+			return {
+				...state,
+				network: {
+					...state.network,
+					showSSID: !state.network.showSSID
+				}
+			}
+		}
 		default:
 			return state
 	}
@@ -117,7 +128,7 @@ function Widget({ connected, battery, workspaces, network }) {
 }
 
 function render(state) {
-	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} network={state.network} />
+	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} network={state.network} daemons={state.daemons} />
 }
 
 export { className, initialState, init, updateState, render }
