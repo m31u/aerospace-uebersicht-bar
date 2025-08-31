@@ -4,13 +4,11 @@ import { Battery } from "./lib/components/battery.jsx"
 import { Clock } from "./lib/components/clock.jsx"
 import { colors } from "./lib/util.js"
 import { StateEvents, initServer } from "./lib/server.js"
-import { InfoContainer } from "./lib/components/common.jsx"
 import { Network } from "./lib/components/network.jsx"
 
 const init = initServer
 
 const initialState = {
-	daemons: [],
 	connected: false,
 	battery: {
 		percentage: 0,
@@ -128,7 +126,7 @@ function Widget({ connected, battery, workspaces, network }) {
 }
 
 function render(state) {
-	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} network={state.network} daemons={state.daemons} />
+	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} network={state.network} />
 }
 
 export { className, initialState, init, updateState, render }
