@@ -5,6 +5,7 @@ import { Clock } from "./lib/components/clock.jsx"
 import { colors } from "./lib/util.js"
 import { StateEvents, initServer } from "./lib/server.js"
 import { Network } from "./lib/components/network.jsx"
+import { NowPlaying } from "./lib/components/nowplaying.jsx"
 
 const init = initServer
 
@@ -20,6 +21,11 @@ const initialState = {
 		ssid: "",
 		connected: false,
 		showSSID: false
+	},
+	nowPlaying: {
+		isPlaying: false,
+		artist: "",
+		title: ""
 	}
 }
 
@@ -85,6 +91,24 @@ function updateState(event, state) {
 				}
 			}
 		}
+		case StateEvents.NowPlaying: {
+			return {
+				...state,
+				nowPlaying: {
+					...state.nowPlaying,
+					...event.data
+				}
+			}
+		}
+		case StateEvents.IsPlaying: {
+			return {
+				...state,
+				nowPlaying: {
+					...state.nowPlaying,
+					isPlaying: event.data
+				}
+			}
+		}
 		default:
 			return state
 	}
@@ -98,7 +122,7 @@ const className = {
 	width: "100%",
 }
 
-function Widget({ connected, battery, workspaces, network }) {
+function Widget({ connected, battery, workspaces, network, nowPlaying }) {
 
 	if (!connected) {
 		return (
@@ -117,6 +141,7 @@ function Widget({ connected, battery, workspaces, network }) {
 				<Workspaces workspaces={workspaces} />
 			</LeftContainer>
 			<RightContainer>
+				<NowPlaying nowPlaying={nowPlaying} />
 				<Network network={network} />
 				<Battery battery={battery} />
 				<Clock />
@@ -126,7 +151,7 @@ function Widget({ connected, battery, workspaces, network }) {
 }
 
 function render(state) {
-	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} network={state.network} />
+	return <Widget connected={state.connected} battery={state.battery} workspaces={state.workspaces} network={state.network} nowPlaying={state.nowPlaying} />
 }
 
 export { className, initialState, init, updateState, render }
