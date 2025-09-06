@@ -28,16 +28,21 @@ const MarqueeContainer = styled("div")(({ width }) => {
 })
 
 function MarqueeText({ children }) {
+
 	const className = css`
   		position: absolute;
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		animation: marquee 10s linear infinite;
+		animation: ${children.length < MAX_TITLE_LENGTH * 2 ? "marquee 10s" : "marqueeLong 20s"} linear infinite;
 		height: 16px;
 		gap: 6px;
 		@keyframes marquee {
 			0%, 50% { transform: translate(0%)}
+			100% { transform: translate(calc(-50% - 3px)) }
+		}
+		@keyframes marqueeLong {
+			0%, 25% { transform: translate(0%)}
 			100% { transform: translate(calc(-50% - 3px)) }
 		}
 `
