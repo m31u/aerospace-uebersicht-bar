@@ -4,6 +4,11 @@ import { colors } from "../util.js"
 
 const { useEffect, useState } = React
 
+const playerIcons = {
+	"ZEN": "\uee47",
+	"SPOTIFY": "\uf1bc",
+	"default": "\udb81\ude14"
+}
 const NowPlayingContainer = styled("div")(({ color }) => ({
 	display: "flex",
 	justifyContent: "center",
@@ -74,6 +79,14 @@ function TitleWrapper({ title, isPlaying }) {
 
 const MAX_TITLE_LENGTH = 25
 
+function PlayerIcon({ player }) {
+
+	const icon = playerIcons[player.toUpperCase()] || playerIcons["default"]
+
+
+	return <span className={css`padding-right: 6px;`}>{icon}</span>
+}
+
 function NowPlaying({ nowPlaying }) {
 	const { artist, title, isPlaying } = nowPlaying
 
@@ -104,6 +117,7 @@ function NowPlaying({ nowPlaying }) {
 
 	return <InfoContainer>
 		<NowPlayingContainer color={color}>
+			<PlayerIcon player={nowPlaying.player} />
 			<p>{artist}</p>
 			{"|"}
 			<TitleWrapper title={title} isPlaying={isPlaying} />

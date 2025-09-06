@@ -25,7 +25,8 @@ const initialState = {
 	nowPlaying: {
 		isPlaying: false,
 		artist: "",
-		title: ""
+		title: "",
+		player: ""
 	}
 }
 
@@ -107,6 +108,16 @@ function updateState(event, state) {
 					...state.nowPlaying,
 					isPlaying: event.data
 				}
+			}
+		}
+		case StateEvents.CurrentPlayer: {
+			return {
+				...state,
+				nowPlaying: {
+					...state.nowPlaying,
+					player: event.data
+				}
+
 			}
 		}
 		default:
