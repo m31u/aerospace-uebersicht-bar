@@ -18,7 +18,11 @@ const Space = styled("div")(({ focused, empty }) => {
 		minWidth: "16px",
 		boxSizing: "border-box",
 		"span.icon": {
+			color: colors.Overlay0,
 			padding: "0 6px"
+		},
+		"span.focused": {
+			color: colors.Base
 		}
 	}
 })
@@ -46,7 +50,7 @@ function Workspace({ workspace, windows, focused }) {
 	}
 	return <Space key={workspace} empty={empty} focused={focused}>
 		<span>{workspace}</span>
-		{windows.map(w => <span key={w.id} className="icon">{getWindowIcon(w.app)}</span>)}
+		{windows.map(w => <span key={w.id} className={`icon ${w.focused ? "focused" : ""}`}>{getWindowIcon(w.app)}</span>)}
 	</Space>
 
 }
