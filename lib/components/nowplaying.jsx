@@ -13,7 +13,7 @@ const NowPlayingContainer = styled("div")(({ color }) => ({
 	display: "flex",
 	justifyContent: "center",
 	alignItems: "center",
-	color: colors.Base,
+	color: colors.BackgroundDim,
 	border: `1px solid ${color}`,
 	background: color,
 	padding: "0 6px",
@@ -105,10 +105,10 @@ function NowPlaying({ nowPlaying }) {
 
 	const color = ((playing) => {
 		if (playing) {
-			return colors.Sapphire
+			return colors.Foreground
 		}
 
-		return colors.Text
+		return colors.Grey2
 	})(nowPlaying.isPlaying)
 
 	if (!show) {

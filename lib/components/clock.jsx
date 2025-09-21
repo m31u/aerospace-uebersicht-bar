@@ -9,7 +9,7 @@ const ClockContainer = styled("div")(({ color }) => ({
 	display: "flex",
 	justifyContent: "center",
 	alignItems: "center",
-	color: colors.Base,
+	color: colors.BackgroundDim,
 	border: `1px solid ${color}`,
 	background: color,
 	padding: "0 6px",
@@ -52,11 +52,11 @@ function Clock() {
 
 	return (
 		<InfoContainer>
-			<ClockContainer color={colors.Sapphire}>
+			<ClockContainer color={colors.Yellow}>
 				<span className={css({ marginRight: "6px" })}>{"\udb83\ude17"}</span>
 				{time.currentDate}
 			</ClockContainer>
-			<ClockContainer color={colors.Blue}>
+			<ClockContainer color={colors.Orange}>
 				<span className={css({ marginRight: "6px" })}>{clock}</span>
 				{time.currentTime}
 			</ClockContainer>

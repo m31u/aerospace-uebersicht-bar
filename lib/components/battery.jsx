@@ -13,7 +13,7 @@ const BatteryContainer = styled("div")(({ color }) => ({
 	height: "16px",
 	lineHeight: 1,
 	background: color,
-	color: colors.Base,
+	color: colors.BackgroundDim,
 	padding: "0 6px",
 }))
 
@@ -25,16 +25,16 @@ function Battery({ battery }) {
 			return colors.Green
 		}
 		if (charging) {
-			return colors.Teal
+			return colors.Aqua
 		}
 		if (source == "AC") {
 			return colors.Yellow
 		}
 		if (percentage > 25) {
-			return colors.Sky
+			return colors.Blue
 		}
 		if (percentage > 15) {
-			return colors.Peach
+			return colors.Orange
 		}
 
 		return colors.Red

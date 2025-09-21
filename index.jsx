@@ -90,7 +90,7 @@ const Message = styled("div")({
 	border: `1px solid ${colors.Yellow}`,
 	background: colors.Yellow,
 	justifyContent: "center",
-	color: colors.Base,
+	color: colors.BackgroundDim,
 	alignItems: "center",
 	padding: "0 6px"
 })

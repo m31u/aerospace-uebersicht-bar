@@ -3,13 +3,13 @@ import { InfoContainer } from "./common.jsx"
 import { colors } from "../util.js"
 
 const Space = styled("div")(({ focused, empty }) => {
-	const color = focused ? colors.Text : colors.Subtext0
+	const color = focused ? colors.Foreground : colors.Grey2
 	const padding = empty ? 0 : "6px"
 	return {
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		color: colors.Base,
+		color: colors.BackgroundDim,
 		border: `1px solid ${color}`,
 		borderRadius: "16px",
 		height: "16px",
@@ -18,11 +18,11 @@ const Space = styled("div")(({ focused, empty }) => {
 		minWidth: "16px",
 		boxSizing: "border-box",
 		"span.icon": {
-			color: colors.Overlay0,
+			color: colors.Grey0,
 			padding: "0 6px"
 		},
 		"span.focused": {
-			color: colors.Base
+			color: colors.BackgroundDim
 		}
 	}
 })

@@ -6,7 +6,7 @@ const NetworkContainer = styled("div")(({ color }) => ({
 	display: "flex",
 	justifyContent: "center",
 	alignItems: "center",
-	color: colors.Base,
+	color: colors.BackgroundDim,
 	border: `1px solid ${color}`,
 	background: color,
 	padding: "0 6px",
@@ -24,7 +24,7 @@ function Network({ network }) {
 
 	if (!ssid) {
 		ssid = "Not Connected"
-		color = colors.Text
+		color = colors.Foreground
 	}
 
 	if (ssid == "NO_PERMISSIONS") {
