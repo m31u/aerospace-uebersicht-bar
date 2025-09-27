@@ -97,8 +97,7 @@ const Message = styled("div")({
 
 const Container = styled("div")({
 	display: "flex",
-	margin: "8px",
-	padding: "0 2px",
+	margin: "8px 10px",
 	fontFamily: "Iosevka Nerd Font",
 	fontWeight: "normal",
 	fontVariant: "normal",
@@ -111,5 +110,3 @@ const Container = styled("div")({
 	userSelect: "none",
 	cursor: "default"
 })
-
-
