@@ -1,3 +1,4 @@
+import config from "../../conf.json"
 import { styled, React } from "uebersicht"
 import { InfoContainer } from "./common.jsx"
 import { colors } from "../util.js"
@@ -42,10 +43,10 @@ function getWindowIcon(app) {
 }
 
 
-function Workspace({ workspace, windows, focused }) {
+function Workspace({ workspace, windows, focused, display }) {
 	const empty = !windows.length
 
-	if (empty && !focused) {
+	if (empty && !focused || display != config.display) {
 		return null
 	}
 	return <Space key={workspace} empty={empty} focused={focused}>
@@ -58,12 +59,13 @@ function Workspace({ workspace, windows, focused }) {
 function Workspaces({ workspaces }) {
 	return (
 		<InfoContainer width="45%" justify="flex-start">
-			{workspaces.map(({ focused, workspace, windows }) => (
+			{workspaces.map(({ focused, workspace, windows, display }) => (
 				<Workspace
 					key={workspace}
 					workspace={workspace}
 					windows={windows}
 					focused={focused}
+					display={display}
 				/>
 			))}
 		</InfoContainer>
