@@ -35,6 +35,7 @@ const windowIcons = {
 	"KARABINER-ELEMENTS": "\udb85\udcc0",
 	"SYSTEM SETTINGS": "\uef70",
 	"SPOTIFY": "\uf1bc",
+	"MAIL": "\udb80\uddee",
 	"default": "\udb81\ude14"
 }
 
